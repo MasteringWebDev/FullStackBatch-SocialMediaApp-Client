@@ -12,6 +12,7 @@ import AppNavbar from './components/AppNavbar'
 
 function App() {
   const [currentUser, setCurrentUser] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     getCurrentUser()
@@ -19,12 +20,21 @@ function App() {
 
   async function getCurrentUser() {
     try {
+      setIsLoading(true)
       const API_URL = import.meta.env.VITE_API_URL
       const res = await axios.get(`${API_URL}/users/current-user`)
       setCurrentUser(res.data.user)
+      setIsLoading(false)
     } catch (error) {
       console.log('Something went wrong', error)
+      setIsLoading(false)
     }
+  }
+
+  if(isLoading) {
+    return (
+      <div>Loading ...</div>
+    )
   }
 
   return (
